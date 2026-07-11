@@ -8,9 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <style>
-    /* ══════════════════════════════
-       TOKENS
-    ══════════════════════════════ */
     :root {
       --ink:        #111110;
       --paper:      #f5f3ee;
@@ -20,528 +17,192 @@
       --muted:      #888078;
       --rule:       #e0dbd2;
       --nav-bg:     rgba(245,243,238,0.94);
-
-      --ok:         #1e6641;
-      --ok-bg:      #edf7f1;
-      --warn:       #7a4f10;
-      --warn-bg:    #fdf3e3;
-      --bad:        #7a1e1e;
-      --bad-bg:     #fdeaea;
-      --info:       #1a3f6f;
-      --info-bg:    #e8f0fb;
-
+      --ok:         #1e6641; --ok-bg:   #edf7f1;
+      --warn:       #7a4f10; --warn-bg: #fdf3e3;
+      --bad:        #7a1e1e; --bad-bg:  #fdeaea;
+      --info:       #1a3f6f; --info-bg: #e8f0fb;
       --display: 'Syne', system-ui, sans-serif;
       --body:    'Inter', system-ui, sans-serif;
-
-      --radius:  0px;
       --shadow:  0 2px 12px rgba(0,0,0,0.06);
     }
-
     [data-theme="dark"] {
-      --ink:        #f0ece3;
-      --paper:      #0d0d0c;
-      --surface:    #1a1917;
-      --accent:     #d4764e;
-      --accent-dim: rgba(212,118,78,0.1);
-      --muted:      #8a8278;
-      --rule:       #2a2926;
-      --nav-bg:     rgba(13,13,12,0.94);
-
-      --ok:         #3aaa6a;
-      --ok-bg:      #0d2318;
-      --warn:       #c9882a;
-      --warn-bg:    #1f1508;
-      --bad:        #d45050;
-      --bad-bg:     #200c0c;
-      --info:       #5a8fd4;
-      --info-bg:    #091529;
+      --ink:        #f0ece3; --paper:   #0d0d0c; --surface: #1a1917;
+      --accent:     #d4764e; --accent-dim: rgba(212,118,78,0.1);
+      --muted:      #8a8278; --rule:    #2a2926; --nav-bg:  rgba(13,13,12,0.94);
+      --ok:  #3aaa6a; --ok-bg:   #0d2318;
+      --warn:#c9882a; --warn-bg: #1f1508;
+      --bad: #d45050; --bad-bg:  #200c0c;
+      --info:#5a8fd4; --info-bg: #091529;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-
     body {
-      background: var(--paper);
-      color: var(--ink);
-      font-family: var(--body);
-      font-size: 16px;
-      line-height: 1.6;
-      transition: background 0.3s, color 0.3s;
-      min-height: 100vh;
+      background: var(--paper); color: var(--ink);
+      font-family: var(--body); font-size: 16px; line-height: 1.6;
+      transition: background 0.3s, color 0.3s; min-height: 100vh;
     }
 
-    /* ══════════════════════════════
-       NAV
-    ══════════════════════════════ */
+    /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0;
       display: flex; justify-content: space-between; align-items: center;
-      padding: 1rem 6vw;
-      background: var(--nav-bg);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--rule);
-      z-index: 100;
+      padding: 1rem 6vw; background: var(--nav-bg);
+      backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule); z-index: 100;
     }
-
-    .nav-logo {
-      font-family: var(--display);
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      color: var(--ink);
-      text-decoration: none;
-    }
-
+    .nav-logo { font-family: var(--display); font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
     .nav-right { display: flex; align-items: center; gap: 1rem; }
-
-    .nav-back {
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
+    .nav-back { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
     .nav-back:hover { color: var(--accent); }
-
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--rule);
-      border-radius: 100px;
-      padding: 0.35rem 0.75rem;
-      cursor: pointer;
-      font-size: 0.9rem;
-      color: var(--ink);
-      display: flex; align-items: center; gap: 0.35rem;
-      transition: border-color 0.2s;
-    }
+    .theme-toggle { background: none; border: 1px solid var(--rule); border-radius: 100px; padding: 0.35rem 0.75rem; cursor: pointer; font-size: 0.9rem; color: var(--ink); display: flex; align-items: center; gap: 0.35rem; transition: border-color 0.2s; }
     .theme-toggle:hover { border-color: var(--accent); }
     .toggle-label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 
-    /* ══════════════════════════════
-       LAYOUT
-    ══════════════════════════════ */
-    main {
-      padding: 7rem 6vw 5rem;
-      max-width: 560px;
-      margin: 0 auto;
-    }
+    /* ── LAYOUT ── */
+    main { padding: 7rem 6vw 5rem; max-width: 580px; margin: 0 auto; }
 
-    /* ══════════════════════════════
-       HEADER
-    ══════════════════════════════ */
-    .page-tag {
-      display: inline-block;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid var(--accent);
-      padding: 0.25rem 0.7rem;
-      margin-bottom: 1.4rem;
-    }
-
-    .page-title {
-      font-family: var(--display);
-      font-size: clamp(2.2rem, 8vw, 3.6rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1;
-      margin-bottom: 0.7rem;
-      color: var(--ink);
-    }
-
+    /* ── HEADER ── */
+    .page-tag { display: inline-block; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 0.25rem 0.7rem; margin-bottom: 1.4rem; }
+    .page-title { font-family: var(--display); font-size: clamp(2.2rem, 8vw, 3.6rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.7rem; }
     .page-title .accent { color: var(--accent); }
+    .page-sub { font-size: 0.95rem; color: var(--muted); font-weight: 400; margin-bottom: 2.5rem; line-height: 1.6; }
 
-    .page-sub {
-      font-size: 0.95rem;
-      color: var(--muted);
-      font-weight: 400;
-      margin-bottom: 2.5rem;
-      line-height: 1.6;
+    /* ── INPUT CARD ── */
+    .input-section { background: var(--surface); border: 1px solid var(--rule); padding: 1.8rem; margin-bottom: 1rem; box-shadow: var(--shadow); }
+
+    /* ── UNIT TOGGLE ── */
+    .unit-row { display: flex; gap: 0.4rem; margin-bottom: 1.2rem; }
+    .unit-btn {
+      padding: 0.4rem 0.9rem;
+      background: var(--paper); border: 1px solid var(--rule);
+      color: var(--muted); font-family: var(--display);
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; cursor: pointer; transition: all 0.15s;
     }
+    .unit-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .unit-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-    /* ══════════════════════════════
-       INPUT SECTION
-    ══════════════════════════════ */
-    .input-section {
-      background: var(--surface);
-      border: 1px solid var(--rule);
-      padding: 1.8rem;
-      margin-bottom: 1rem;
-      box-shadow: var(--shadow);
+    /* ── FIELD LABEL ── */
+    .field-label { font-family: var(--display); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.8rem; display: block; }
+
+    /* ── VALUE DISPLAY ── */
+    .value-display { display: flex; align-items: baseline; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .value-number { font-family: var(--display); font-size: 3rem; font-weight: 700; letter-spacing: -0.04em; line-height: 1; color: var(--ink); min-width: 3ch; }
+    .value-unit { font-size: 1rem; color: var(--muted); font-weight: 400; }
+
+    /* ── MANUAL INPUT ── */
+    .manual-row { display: flex; gap: 0.5rem; margin-bottom: 1rem; align-items: stretch; }
+    .manual-input {
+      flex: 1; background: var(--paper); border: 1px solid var(--rule);
+      color: var(--ink); font-family: var(--display); font-size: 1rem; font-weight: 600;
+      padding: 0.65rem 0.9rem; outline: none; transition: border-color 0.2s; min-width: 0;
+      -moz-appearance: textfield;
     }
-
-    .field-label {
-      font-family: var(--display);
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.8rem;
-      display: block;
+    .manual-input::-webkit-outer-spin-button,
+    .manual-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .manual-input:focus { border-color: var(--accent); }
+    .manual-input::placeholder { color: var(--muted); font-weight: 400; }
+    .manual-apply {
+      padding: 0.65rem 1.1rem; background: var(--ink); color: var(--paper);
+      border: none; font-family: var(--display); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 0.15s; white-space: nowrap;
     }
+    .manual-apply:hover { background: var(--accent); }
 
-    /* ── DISPLAY VALUE ── */
-    .value-display {
-      display: flex;
-      align-items: baseline;
-      gap: 0.4rem;
-      margin-bottom: 1.2rem;
+    /* feet+inches row */
+    .fi-row { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+    .fi-group { flex: 1; display: flex; flex-direction: column; gap: 0.3rem; }
+    .fi-sublabel { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .fi-input {
+      background: var(--paper); border: 1px solid var(--rule); color: var(--ink);
+      font-family: var(--display); font-size: 1rem; font-weight: 600;
+      padding: 0.65rem 0.9rem; outline: none; transition: border-color 0.2s; width: 100%;
+      -moz-appearance: textfield;
     }
-
-    .value-number {
-      font-family: var(--display);
-      font-size: 3.2rem;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1;
-      color: var(--ink);
-      transition: color 0.2s;
-      min-width: 3ch;
+    .fi-input::-webkit-outer-spin-button,
+    .fi-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .fi-input:focus { border-color: var(--accent); }
+    .fi-apply {
+      align-self: flex-end; padding: 0.65rem 1.1rem; background: var(--ink); color: var(--paper);
+      border: none; font-family: var(--display); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 0.15s; white-space: nowrap;
     }
+    .fi-apply:hover { background: var(--accent); }
 
-    .value-unit {
-      font-size: 1rem;
-      color: var(--muted);
-      font-weight: 400;
-    }
-
-    /* ── BUTTON GRID ── */
-    .btn-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 0.5rem;
-      margin-bottom: 0.8rem;
-    }
-
-    .btn-grid-wide {
-      grid-template-columns: repeat(4, 1fr);
-    }
-
+    /* ── QUICK BUTTONS ── */
+    .btn-grid { display: grid; gap: 0.45rem; margin-bottom: 0.8rem; }
     .val-btn {
-      background: var(--paper);
-      border: 1px solid var(--rule);
-      color: var(--ink);
-      font-family: var(--display);
-      font-size: 0.82rem;
-      font-weight: 600;
-      padding: 0.55rem 0.2rem;
-      cursor: pointer;
-      transition: all 0.15s;
-      text-align: center;
-      letter-spacing: -0.01em;
+      background: var(--paper); border: 1px solid var(--rule); color: var(--ink);
+      font-family: var(--display); font-size: 0.8rem; font-weight: 600;
+      padding: 0.55rem 0.2rem; cursor: pointer; transition: all 0.15s; text-align: center;
     }
+    .val-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+    .val-btn:active { transform: scale(0.95); }
 
-    .val-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: var(--accent-dim);
-    }
-
-    .val-btn:active { transform: scale(0.96); }
-
-    /* ── STEPPER ROW ── */
-    .stepper-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
-      margin-top: 0.6rem;
-    }
-
-    .step-btn {
-      width: 42px; height: 42px;
-      background: var(--paper);
-      border: 1px solid var(--rule);
-      color: var(--ink);
-      font-size: 1.3rem;
-      font-weight: 300;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.15s;
-      flex-shrink: 0;
-      line-height: 1;
-    }
-
+    /* ── STEPPER ── */
+    .stepper-row { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-top: 0.4rem; }
+    .step-btn { width: 42px; height: 42px; background: var(--paper); border: 1px solid var(--rule); color: var(--ink); font-size: 1.3rem; font-weight: 300; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
     .step-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
     .step-btn:active { transform: scale(0.93); }
-
-    .step-label {
-      font-size: 0.68rem;
-      color: var(--muted);
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-align: center;
-      flex: 1;
-    }
+    .step-label { font-size: 0.68rem; color: var(--muted); font-weight: 500; letter-spacing: 0.06em; text-align: center; flex: 1; }
 
     /* ── FEEDBACK ── */
-    .field-feedback {
-      font-size: 0.8rem;
-      color: var(--muted);
-      font-style: italic;
-      margin-top: 0.5rem;
-      min-height: 20px;
-      line-height: 1.4;
-    }
+    .field-feedback { font-size: 0.8rem; color: var(--muted); font-style: italic; margin-top: 0.7rem; min-height: 20px; line-height: 1.4; }
+    .field-divider { border: none; border-top: 1px solid var(--rule); margin: 1.6rem 0; }
 
-    .field-divider {
-      border: none;
-      border-top: 1px solid var(--rule);
-      margin: 1.6rem 0;
-    }
-
-    /* ── CALCULATE BUTTON ── */
-    .calc-btn {
-      width: 100%;
-      padding: 1rem;
-      background: var(--ink);
-      color: var(--paper);
-      font-family: var(--display);
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      margin-top: 1.2rem;
-    }
+    /* ── CALCULATE ── */
+    .calc-btn { width: 100%; padding: 1rem; background: var(--ink); color: var(--paper); font-family: var(--display); font-size: 0.9rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.2s, transform 0.1s; margin-top: 1.2rem; }
     .calc-btn:hover { background: var(--accent); }
     .calc-btn:active { transform: scale(0.99); }
 
-    /* ══════════════════════════════
-       RESULT CARD
-    ══════════════════════════════ */
-    .result-card {
-      display: none;
-      background: var(--surface);
-      border: 1px solid var(--rule);
-      padding: 1.8rem;
-      margin-top: 1rem;
-      box-shadow: var(--shadow);
-      animation: fadeUp 0.45s cubic-bezier(0.22,1,0.36,1) both;
-    }
-
+    /* ── RESULT ── */
+    .result-card { display: none; background: var(--surface); border: 1px solid var(--rule); padding: 1.8rem; margin-top: 1rem; box-shadow: var(--shadow); animation: fadeUp 0.45s cubic-bezier(0.22,1,0.36,1) both; }
     .result-card.visible { display: block; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    .result-tag { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+    .bmi-row { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.3rem; flex-wrap: wrap; }
+    .bmi-big { font-family: var(--display); font-size: clamp(3.5rem, 14vw, 5.5rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1; color: var(--accent); }
+    .bmi-cat { font-family: var(--display); font-size: 1.1rem; font-weight: 600; color: var(--ink); letter-spacing: -0.02em; }
 
-    .result-tag {
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.5rem;
-    }
-
-    .bmi-row {
-      display: flex;
-      align-items: baseline;
-      gap: 1rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .bmi-big {
-      font-family: var(--display);
-      font-size: clamp(3.5rem, 14vw, 5.5rem);
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1;
-      color: var(--accent);
-    }
-
-    .bmi-cat {
-      font-family: var(--display);
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--ink);
-      letter-spacing: -0.02em;
-    }
-
-    /* ── SCALE BAR ── */
     .scale-wrap { margin: 1.6rem 0 1.2rem; }
+    .scale-title { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.7rem; }
+    .scale-bar { height: 6px; background: linear-gradient(to right, #4a90d9 0%, #4a90d9 25%, #1e6641 25%, #1e6641 62%, #c9882a 62%, #c9882a 82%, #d45050 82%, #d45050 100%); position: relative; margin-bottom: 0.5rem; }
+    .scale-dot { position: absolute; top: 50%; width: 14px; height: 14px; background: var(--ink); border: 2px solid var(--paper); border-radius: 50%; transform: translate(-50%, -50%); transition: left 0.9s cubic-bezier(0.34,1.56,0.64,1); box-shadow: 0 0 0 2px var(--ink); }
+    .scale-ticks { display: flex; justify-content: space-between; font-size: 0.63rem; color: var(--muted); font-weight: 500; }
 
-    .scale-title {
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.7rem;
-    }
-
-    .scale-bar {
-      height: 6px;
-      background: linear-gradient(to right,
-        #4a90d9   0%,
-        #4a90d9  25%,
-        #1e6641  25%,
-        #1e6641  62%,
-        #c9882a  62%,
-        #c9882a  82%,
-        #d45050  82%,
-        #d45050 100%
-      );
-      position: relative;
-      margin-bottom: 0.5rem;
-    }
-
-    .scale-dot {
-      position: absolute;
-      top: 50%;
-      width: 14px; height: 14px;
-      background: var(--ink);
-      border: 2px solid var(--paper);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      transition: left 0.9s cubic-bezier(0.34,1.56,0.64,1);
-      box-shadow: 0 0 0 2px var(--ink);
-    }
-
-    .scale-ticks {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.63rem;
-      color: var(--muted);
-      font-weight: 500;
-      letter-spacing: 0.04em;
-    }
-
-    /* ── ALERT ── */
-    .result-alert {
-      padding: 0.9rem 1.1rem;
-      font-size: 0.85rem;
-      font-weight: 400;
-      line-height: 1.5;
-      margin: 1.2rem 0;
-      border-left: 3px solid;
-    }
-
+    .result-alert { padding: 0.9rem 1.1rem; font-size: 0.85rem; line-height: 1.5; margin: 1.2rem 0; border-left: 3px solid; }
     .alert-ok   { background: var(--ok-bg);   border-color: var(--ok);   color: var(--ok); }
     .alert-warn { background: var(--warn-bg);  border-color: var(--warn); color: var(--warn); }
     .alert-bad  { background: var(--bad-bg);   border-color: var(--bad);  color: var(--bad); }
-    .alert-info { background: var(--info-bg);  border-color: var(--info); color: var(--info); }
+    .height-note { padding: 0.9rem 1.1rem; font-size: 0.85rem; line-height: 1.5; border-left: 3px solid var(--info); background: var(--info-bg); color: var(--info); margin-bottom: 1.2rem; }
 
-    /* ── HEIGHT COMMENT ── */
-    .height-note {
-      padding: 0.9rem 1.1rem;
-      font-size: 0.85rem;
-      line-height: 1.5;
-      border-left: 3px solid var(--info);
-      background: var(--info-bg);
-      color: var(--info);
-      margin-bottom: 1.2rem;
-    }
+    .range-title { font-family: var(--display); font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; margin: 1.4rem 0 0.8rem; }
+    .range-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .range-card { padding: 0.8rem 1rem; border: 1px solid var(--rule); background: var(--paper); transition: all 0.2s; }
+    .range-card.active { border-color: var(--accent); background: var(--accent-dim); }
+    .range-tag { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
+    .range-name { font-family: var(--display); font-size: 0.88rem; font-weight: 600; color: var(--ink); }
 
-    /* ── BMI RANGE GRID ── */
-    .range-title {
-      font-family: var(--display);
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin: 1.4rem 0 0.8rem;
-      color: var(--ink);
-    }
-
-    .range-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-    }
-
-    .range-card {
-      padding: 0.8rem 1rem;
-      border: 1px solid var(--rule);
-      background: var(--paper);
-      transition: all 0.2s;
-    }
-
-    .range-card.active {
-      border-color: var(--accent);
-      background: var(--accent-dim);
-    }
-
-    .range-tag {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.2rem;
-    }
-
-    .range-name {
-      font-family: var(--display);
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--ink);
-      letter-spacing: -0.01em;
-    }
-
-    /* ── RECALC ── */
-    .recalc-btn {
-      width: 100%;
-      padding: 0.8rem;
-      background: none;
-      border: 1px solid var(--rule);
-      color: var(--muted);
-      font-family: var(--display);
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-top: 1.4rem;
-    }
+    .recalc-btn { width: 100%; padding: 0.8rem; background: none; border: 1px solid var(--rule); color: var(--muted); font-family: var(--display); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; margin-top: 1.4rem; }
     .recalc-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ══════════════════════════════
-       FOOTER
-    ══════════════════════════════ */
-    footer {
-      border-top: 1px solid var(--rule);
-      padding: 1.8rem 6vw;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.78rem;
-      color: var(--muted);
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .footer-back {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.78rem;
-      letter-spacing: 0.04em;
-      transition: color 0.2s;
-    }
+    footer { border-top: 1px solid var(--rule); padding: 1.8rem 6vw; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: var(--muted); flex-wrap: wrap; gap: 0.5rem; }
+    .footer-back { color: var(--muted); text-decoration: none; font-size: 0.78rem; letter-spacing: 0.04em; transition: color 0.2s; }
     .footer-back:hover { color: var(--accent); }
-
     :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
+    /* hidden utility */
+    .hidden { display: none !important; }
+
     @media (max-width: 480px) {
-      .btn-grid { grid-template-columns: repeat(4, 1fr); }
-      .btn-grid-wide { grid-template-columns: repeat(3, 1fr); }
       .range-grid { grid-template-columns: 1fr; }
       .bmi-big { font-size: 3.5rem; }
+      .fi-row { flex-wrap: wrap; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
   <nav>
     <a href="index.html" class="nav-logo">Cornell Isikhuemen</a>
     <div class="nav-right">
@@ -554,99 +215,202 @@
   </nav>
 
   <main>
-
-    <!-- HEADER -->
     <div class="page-tag">Mini App · By Cornell</div>
     <h1 class="page-title">BMI<br/><span class="accent">Calculator</span></h1>
-    <p class="page-sub">Find out your Body Mass Index in seconds. Tap buttons to set your height and weight, then calculate. 💪</p>
+    <p class="page-sub">Find out your Body Mass Index in seconds. Choose your preferred units, set your measurements, then calculate. 💪</p>
 
-    <!-- HEIGHT INPUT -->
     <div class="input-section">
-      <label class="field-label" for="heightDisplay">Height</label>
 
+      <!-- ══ HEIGHT ══ -->
+      <label class="field-label">Height</label>
+
+      <!-- Unit toggle -->
+      <div class="unit-row" role="group" aria-label="Height unit">
+        <button class="unit-btn active" onclick="setHeightUnit('m')"   id="hu-m">Metres</button>
+        <button class="unit-btn"        onclick="setHeightUnit('cm')"  id="hu-cm">Centimetres</button>
+        <button class="unit-btn"        onclick="setHeightUnit('ft')"  id="hu-ft">Feet & Inches</button>
+      </div>
+
+      <!-- Live display -->
       <div class="value-display">
         <div class="value-number" id="heightDisplay">1.70</div>
-        <div class="value-unit">metres</div>
+        <div class="value-unit"   id="heightUnit">m</div>
       </div>
 
-      <!-- Quick-set height buttons -->
-      <div class="btn-grid" role="group" aria-label="Quick-set height">
-        <button class="val-btn" onclick="setHeight(1.50)" aria-label="Set height to 1.50 metres">1.50</button>
-        <button class="val-btn" onclick="setHeight(1.55)" aria-label="Set height to 1.55 metres">1.55</button>
-        <button class="val-btn" onclick="setHeight(1.60)" aria-label="Set height to 1.60 metres">1.60</button>
-        <button class="val-btn" onclick="setHeight(1.65)" aria-label="Set height to 1.65 metres">1.65</button>
-        <button class="val-btn" onclick="setHeight(1.70)" aria-label="Set height to 1.70 metres">1.70</button>
-        <button class="val-btn" onclick="setHeight(1.75)" aria-label="Set height to 1.75 metres">1.75</button>
-        <button class="val-btn" onclick="setHeight(1.80)" aria-label="Set height to 1.80 metres">1.80</button>
-        <button class="val-btn" onclick="setHeight(1.85)" aria-label="Set height to 1.85 metres">1.85</button>
-        <button class="val-btn" onclick="setHeight(1.90)" aria-label="Set height to 1.90 metres">1.90</button>
-        <button class="val-btn" onclick="setHeight(1.95)" aria-label="Set height to 1.95 metres">1.95</button>
+      <!-- ── METRES panel ── -->
+      <div id="panel-m">
+        <div class="manual-row">
+          <input class="manual-input" type="number" id="input-m" placeholder="e.g. 1.75" min="0.5" max="3.0" step="0.01" aria-label="Type height in metres" />
+          <button class="manual-apply" onclick="applyManualHeight('m')">Apply</button>
+        </div>
+        <div class="btn-grid" style="grid-template-columns:repeat(5,1fr)" role="group" aria-label="Quick-set height in metres">
+          <button class="val-btn" onclick="setHeightM(1.50)">1.50</button>
+          <button class="val-btn" onclick="setHeightM(1.55)">1.55</button>
+          <button class="val-btn" onclick="setHeightM(1.60)">1.60</button>
+          <button class="val-btn" onclick="setHeightM(1.65)">1.65</button>
+          <button class="val-btn" onclick="setHeightM(1.70)">1.70</button>
+          <button class="val-btn" onclick="setHeightM(1.75)">1.75</button>
+          <button class="val-btn" onclick="setHeightM(1.80)">1.80</button>
+          <button class="val-btn" onclick="setHeightM(1.85)">1.85</button>
+          <button class="val-btn" onclick="setHeightM(1.90)">1.90</button>
+          <button class="val-btn" onclick="setHeightM(1.95)">1.95</button>
+        </div>
+        <div class="stepper-row">
+          <button class="step-btn" onclick="adjustHeightM(-0.01)" aria-label="Decrease height 0.01m">−</button>
+          <span class="step-label">Fine-tune ± 0.01 m</span>
+          <button class="step-btn" onclick="adjustHeightM(0.01)"  aria-label="Increase height 0.01m">+</button>
+        </div>
       </div>
 
-      <!-- Fine-tune stepper -->
-      <div class="stepper-row">
-        <button class="step-btn" onclick="adjustHeight(-0.01)" aria-label="Decrease height by 0.01 metres">−</button>
-        <span class="step-label">Fine-tune ± 0.01m</span>
-        <button class="step-btn" onclick="adjustHeight(0.01)" aria-label="Increase height by 0.01 metres">+</button>
+      <!-- ── CENTIMETRES panel ── -->
+      <div id="panel-cm" class="hidden">
+        <div class="manual-row">
+          <input class="manual-input" type="number" id="input-cm" placeholder="e.g. 175" min="50" max="300" step="1" aria-label="Type height in centimetres" />
+          <button class="manual-apply" onclick="applyManualHeight('cm')">Apply</button>
+        </div>
+        <div class="btn-grid" style="grid-template-columns:repeat(5,1fr)" role="group" aria-label="Quick-set height in centimetres">
+          <button class="val-btn" onclick="setHeightCm(150)">150</button>
+          <button class="val-btn" onclick="setHeightCm(155)">155</button>
+          <button class="val-btn" onclick="setHeightCm(160)">160</button>
+          <button class="val-btn" onclick="setHeightCm(165)">165</button>
+          <button class="val-btn" onclick="setHeightCm(170)">170</button>
+          <button class="val-btn" onclick="setHeightCm(175)">175</button>
+          <button class="val-btn" onclick="setHeightCm(180)">180</button>
+          <button class="val-btn" onclick="setHeightCm(185)">185</button>
+          <button class="val-btn" onclick="setHeightCm(190)">190</button>
+          <button class="val-btn" onclick="setHeightCm(195)">195</button>
+        </div>
+        <div class="stepper-row">
+          <button class="step-btn" onclick="adjustHeightCm(-1)" aria-label="Decrease height 1cm">−</button>
+          <span class="step-label">Fine-tune ± 1 cm</span>
+          <button class="step-btn" onclick="adjustHeightCm(1)"  aria-label="Increase height 1cm">+</button>
+        </div>
+      </div>
+
+      <!-- ── FEET & INCHES panel ── -->
+      <div id="panel-ft" class="hidden">
+        <div class="fi-row">
+          <div class="fi-group">
+            <span class="fi-sublabel">Feet</span>
+            <input class="fi-input" type="number" id="input-ft" placeholder="5" min="1" max="9" step="1" aria-label="Feet" />
+          </div>
+          <div class="fi-group">
+            <span class="fi-sublabel">Inches</span>
+            <input class="fi-input" type="number" id="input-in" placeholder="7" min="0" max="11" step="1" aria-label="Inches" />
+          </div>
+          <button class="fi-apply" onclick="applyFeetInches()">Apply</button>
+        </div>
+        <div class="btn-grid" style="grid-template-columns:repeat(4,1fr)" role="group" aria-label="Quick-set height in feet">
+          <button class="val-btn" onclick="setHeightFt(4,10)">4′10″</button>
+          <button class="val-btn" onclick="setHeightFt(5,0)">5′0″</button>
+          <button class="val-btn" onclick="setHeightFt(5,2)">5′2″</button>
+          <button class="val-btn" onclick="setHeightFt(5,4)">5′4″</button>
+          <button class="val-btn" onclick="setHeightFt(5,6)">5′6″</button>
+          <button class="val-btn" onclick="setHeightFt(5,8)">5′8″</button>
+          <button class="val-btn" onclick="setHeightFt(5,10)">5′10″</button>
+          <button class="val-btn" onclick="setHeightFt(6,0)">6′0″</button>
+          <button class="val-btn" onclick="setHeightFt(6,2)">6′2″</button>
+          <button class="val-btn" onclick="setHeightFt(6,4)">6′4″</button>
+          <button class="val-btn" onclick="setHeightFt(6,6)">6′6″</button>
+          <button class="val-btn" onclick="setHeightFt(6,8)">6′8″</button>
+        </div>
+        <div class="stepper-row">
+          <button class="step-btn" onclick="adjustHeightFt(-1)" aria-label="Decrease height 1 inch">−</button>
+          <span class="step-label">Fine-tune ± 1 inch</span>
+          <button class="step-btn" onclick="adjustHeightFt(1)"  aria-label="Increase height 1 inch">+</button>
+        </div>
       </div>
 
       <div class="field-feedback" id="heightFeedback">
-        You are basically just average height for someone that is 1.70 metres tall, not bad! 😊
+        You are basically just average height for someone that is 1.70 m tall, not bad! 😊
       </div>
 
       <hr class="field-divider" />
 
-      <!-- WEIGHT INPUT -->
-      <label class="field-label" for="weightDisplay">Weight</label>
+      <!-- ══ WEIGHT ══ -->
+      <label class="field-label">Weight</label>
 
+      <!-- Unit toggle -->
+      <div class="unit-row" role="group" aria-label="Weight unit">
+        <button class="unit-btn active" onclick="setWeightUnit('kg')" id="wu-kg">Kilograms</button>
+        <button class="unit-btn"        onclick="setWeightUnit('lb')" id="wu-lb">Pounds</button>
+      </div>
+
+      <!-- Live display -->
       <div class="value-display">
         <div class="value-number" id="weightDisplay">70.0</div>
-        <div class="value-unit">kilograms</div>
+        <div class="value-unit"   id="weightUnit">kg</div>
       </div>
 
-      <!-- Quick-set weight buttons -->
-      <div class="btn-grid btn-grid-wide" role="group" aria-label="Quick-set weight">
-        <button class="val-btn" onclick="setWeight(50)" aria-label="Set weight to 50 kg">50</button>
-        <button class="val-btn" onclick="setWeight(55)" aria-label="Set weight to 55 kg">55</button>
-        <button class="val-btn" onclick="setWeight(60)" aria-label="Set weight to 60 kg">60</button>
-        <button class="val-btn" onclick="setWeight(65)" aria-label="Set weight to 65 kg">65</button>
-        <button class="val-btn" onclick="setWeight(70)" aria-label="Set weight to 70 kg">70</button>
-        <button class="val-btn" onclick="setWeight(75)" aria-label="Set weight to 75 kg">75</button>
-        <button class="val-btn" onclick="setWeight(80)" aria-label="Set weight to 80 kg">80</button>
-        <button class="val-btn" onclick="setWeight(85)" aria-label="Set weight to 85 kg">85</button>
-        <button class="val-btn" onclick="setWeight(90)" aria-label="Set weight to 90 kg">90</button>
-        <button class="val-btn" onclick="setWeight(95)" aria-label="Set weight to 95 kg">95</button>
-        <button class="val-btn" onclick="setWeight(100)" aria-label="Set weight to 100 kg">100</button>
-        <button class="val-btn" onclick="setWeight(110)" aria-label="Set weight to 110 kg">110</button>
+      <!-- ── KG panel ── -->
+      <div id="panel-kg">
+        <div class="manual-row">
+          <input class="manual-input" type="number" id="input-kg" placeholder="e.g. 72.5" min="1" max="300" step="0.1" aria-label="Type weight in kilograms" />
+          <button class="manual-apply" onclick="applyManualWeight('kg')">Apply</button>
+        </div>
+        <div class="btn-grid" style="grid-template-columns:repeat(4,1fr)" role="group" aria-label="Quick-set weight in kg">
+          <button class="val-btn" onclick="setWeightKg(50)">50</button>
+          <button class="val-btn" onclick="setWeightKg(55)">55</button>
+          <button class="val-btn" onclick="setWeightKg(60)">60</button>
+          <button class="val-btn" onclick="setWeightKg(65)">65</button>
+          <button class="val-btn" onclick="setWeightKg(70)">70</button>
+          <button class="val-btn" onclick="setWeightKg(75)">75</button>
+          <button class="val-btn" onclick="setWeightKg(80)">80</button>
+          <button class="val-btn" onclick="setWeightKg(85)">85</button>
+          <button class="val-btn" onclick="setWeightKg(90)">90</button>
+          <button class="val-btn" onclick="setWeightKg(95)">95</button>
+          <button class="val-btn" onclick="setWeightKg(100)">100</button>
+          <button class="val-btn" onclick="setWeightKg(110)">110</button>
+        </div>
+        <div class="stepper-row">
+          <button class="step-btn" onclick="adjustWeightKg(-0.5)" aria-label="Decrease weight 0.5kg">−</button>
+          <span class="step-label">Fine-tune ± 0.5 kg</span>
+          <button class="step-btn" onclick="adjustWeightKg(0.5)"  aria-label="Increase weight 0.5kg">+</button>
+        </div>
       </div>
 
-      <!-- Fine-tune stepper -->
-      <div class="stepper-row">
-        <button class="step-btn" onclick="adjustWeight(-0.5)" aria-label="Decrease weight by 0.5 kg">−</button>
-        <span class="step-label">Fine-tune ± 0.5 kg</span>
-        <button class="step-btn" onclick="adjustWeight(0.5)" aria-label="Increase weight by 0.5 kg">+</button>
+      <!-- ── LB panel ── -->
+      <div id="panel-lb" class="hidden">
+        <div class="manual-row">
+          <input class="manual-input" type="number" id="input-lb" placeholder="e.g. 160" min="2" max="660" step="0.5" aria-label="Type weight in pounds" />
+          <button class="manual-apply" onclick="applyManualWeight('lb')">Apply</button>
+        </div>
+        <div class="btn-grid" style="grid-template-columns:repeat(4,1fr)" role="group" aria-label="Quick-set weight in pounds">
+          <button class="val-btn" onclick="setWeightLb(110)">110</button>
+          <button class="val-btn" onclick="setWeightLb(120)">120</button>
+          <button class="val-btn" onclick="setWeightLb(130)">130</button>
+          <button class="val-btn" onclick="setWeightLb(140)">140</button>
+          <button class="val-btn" onclick="setWeightLb(150)">150</button>
+          <button class="val-btn" onclick="setWeightLb(160)">160</button>
+          <button class="val-btn" onclick="setWeightLb(170)">170</button>
+          <button class="val-btn" onclick="setWeightLb(180)">180</button>
+          <button class="val-btn" onclick="setWeightLb(190)">190</button>
+          <button class="val-btn" onclick="setWeightLb(200)">200</button>
+          <button class="val-btn" onclick="setWeightLb(220)">220</button>
+          <button class="val-btn" onclick="setWeightLb(240)">240</button>
+        </div>
+        <div class="stepper-row">
+          <button class="step-btn" onclick="adjustWeightLb(-1)" aria-label="Decrease weight 1lb">−</button>
+          <span class="step-label">Fine-tune ± 1 lb</span>
+          <button class="step-btn" onclick="adjustWeightLb(1)"  aria-label="Increase weight 1lb">+</button>
+        </div>
       </div>
 
       <div class="field-feedback" id="weightFeedback">
-        Your weight is <strong>70.0 kilograms</strong>. Cool!
+        Your weight is <strong>70.0 kg</strong>. Cool!
       </div>
 
-      <!-- CALCULATE -->
-      <button class="calc-btn" onclick="calculateBMI()" aria-label="Calculate my BMI">
-        Calculate my BMI 🚀
-      </button>
+      <button class="calc-btn" onclick="calculateBMI()">Calculate my BMI 🚀</button>
     </div>
 
     <!-- RESULT CARD -->
     <div class="result-card" id="resultCard" role="region" aria-live="polite" aria-label="BMI Result">
-
       <div class="result-tag">Your Result</div>
       <div class="bmi-row">
         <div class="bmi-big" id="bmiNumber">—</div>
         <div class="bmi-cat" id="bmiCategory"></div>
       </div>
 
-      <!-- SCALE BAR -->
       <div class="scale-wrap">
         <div class="scale-title">Your position on the BMI scale</div>
         <div class="scale-bar">
@@ -660,36 +424,19 @@
         </div>
       </div>
 
-      <!-- HEIGHT COMMENT -->
       <div class="height-note" id="heightNote"></div>
-
-      <!-- BMI ALERT -->
       <div class="result-alert" id="bmiAlert"></div>
 
-      <!-- RANGE CARDS -->
       <div class="range-title">What does your BMI mean?</div>
       <div class="range-grid">
-        <div class="range-card" id="r-under">
-          <div class="range-tag">BMI below 18.5</div>
-          <div class="range-name">⚠️ Underweight</div>
-        </div>
-        <div class="range-card" id="r-normal">
-          <div class="range-tag">BMI 18.5 – 24.9</div>
-          <div class="range-name">✅ Normal Weight</div>
-        </div>
-        <div class="range-card" id="r-over">
-          <div class="range-tag">BMI 25.0 – 29.9</div>
-          <div class="range-name">⚠️ Overweight</div>
-        </div>
-        <div class="range-card" id="r-obese">
-          <div class="range-tag">BMI 30.0 and above</div>
-          <div class="range-name">❗ Obese</div>
-        </div>
+        <div class="range-card" id="r-under"><div class="range-tag">BMI below 18.5</div><div class="range-name">⚠️ Underweight</div></div>
+        <div class="range-card" id="r-normal"><div class="range-tag">BMI 18.5 – 24.9</div><div class="range-name">✅ Normal Weight</div></div>
+        <div class="range-card" id="r-over"><div class="range-tag">BMI 25.0 – 29.9</div><div class="range-name">⚠️ Overweight</div></div>
+        <div class="range-card" id="r-obese"><div class="range-tag">BMI 30.0 and above</div><div class="range-name">❗ Obese</div></div>
       </div>
 
       <button class="recalc-btn" onclick="recalculate()">↺ Recalculate</button>
     </div>
-
   </main>
 
   <footer>
@@ -700,85 +447,144 @@
 
   <script>
 
-    /* ══════════════════════════════
-       DARK / LIGHT MODE
-    ══════════════════════════════ */
+    /* ══ THEME ══ */
     const html = document.documentElement;
     const savedTheme = localStorage.getItem('theme') || 'light';
     html.setAttribute('data-theme', savedTheme);
     updateToggleUI(savedTheme);
-
     document.getElementById('themeToggle').addEventListener('click', () => {
       const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
       html.setAttribute('data-theme', next);
       localStorage.setItem('theme', next);
       updateToggleUI(next);
     });
-
     function updateToggleUI(t) {
       document.getElementById('themeIcon').textContent  = t === 'dark' ? '☀️' : '🌙';
       document.getElementById('themeLabel').textContent = t === 'dark' ? 'Light' : 'Dark';
     }
 
-    /* ══════════════════════════════
-       STATE
-    ══════════════════════════════ */
-    let height = 1.70;
-    let weight = 70.0;
+    /* ══ STATE ══ */
+    let heightM  = 1.70;   // always stored in metres
+    let weightKg = 70.0;   // always stored in kg
+    let hUnit    = 'm';    // 'm' | 'cm' | 'ft'
+    let wUnit    = 'kg';   // 'kg' | 'lb'
 
-    /* ══════════════════════════════
-       HEIGHT CONTROLS
-    ══════════════════════════════ */
-    function setHeight(val) {
-      height = Math.round(val * 100) / 100;
-      updateHeightUI();
+    /* ══ HEIGHT UNIT SWITCH ══ */
+    function setHeightUnit(u) {
+      hUnit = u;
+      ['m','cm','ft'].forEach(x => {
+        document.getElementById('hu-' + x).classList.toggle('active', x === u);
+        document.getElementById('panel-' + x).classList.toggle('hidden', x !== u);
+      });
+      refreshHeightDisplay();
     }
 
-    function adjustHeight(delta) {
-      height = Math.round((height + delta) * 100) / 100;
-      height = Math.min(Math.max(height, 0.50), 3.00);
-      updateHeightUI();
+    /* ══ HEIGHT SETTERS ══ */
+    function setHeightM(v)   { heightM = round(v, 2); refreshHeightDisplay(); }
+    function setHeightCm(v)  { heightM = round(v / 100, 4); refreshHeightDisplay(); }
+    function setHeightFt(ft, inch) { heightM = round((ft * 12 + inch) * 0.0254, 4); refreshHeightDisplay(); }
+
+    function adjustHeightM(d)  { heightM = clamp(round(heightM + d, 2), 0.5, 3.0); refreshHeightDisplay(); }
+    function adjustHeightCm(d) { heightM = clamp(round(heightM + d / 100, 4), 0.5, 3.0); refreshHeightDisplay(); }
+    function adjustHeightFt(d) { heightM = clamp(round(heightM + d * 0.0254, 4), 0.5, 3.0); refreshHeightDisplay(); }
+
+    function applyManualHeight(unit) {
+      let val;
+      if (unit === 'm') {
+        val = parseFloat(document.getElementById('input-m').value);
+        if (isNaN(val) || val < 0.5 || val > 3.0) { alert('Please enter a height between 0.50 m and 3.00 m.'); return; }
+        heightM = round(val, 2);
+      } else if (unit === 'cm') {
+        val = parseFloat(document.getElementById('input-cm').value);
+        if (isNaN(val) || val < 50 || val > 300) { alert('Please enter a height between 50 cm and 300 cm.'); return; }
+        heightM = round(val / 100, 4);
+      }
+      refreshHeightDisplay();
+      document.getElementById('input-' + unit).value = '';
     }
 
-    function updateHeightUI() {
-      document.getElementById('heightDisplay').textContent = height.toFixed(2);
-      document.getElementById('heightFeedback').textContent = getHeightComment(height);
+    function applyFeetInches() {
+      const ft   = parseFloat(document.getElementById('input-ft').value) || 0;
+      const inch = parseFloat(document.getElementById('input-in').value) || 0;
+      if (ft < 1 || ft > 9 || inch < 0 || inch > 11) { alert('Please enter valid feet (1–9) and inches (0–11).'); return; }
+      heightM = round((ft * 12 + inch) * 0.0254, 4);
+      refreshHeightDisplay();
+      document.getElementById('input-ft').value = '';
+      document.getElementById('input-in').value = '';
+    }
+
+    function refreshHeightDisplay() {
+      let display, unit;
+      if (hUnit === 'm') {
+        display = heightM.toFixed(2); unit = 'm';
+      } else if (hUnit === 'cm') {
+        display = (heightM * 100).toFixed(1); unit = 'cm';
+      } else {
+        const totalInches = heightM / 0.0254;
+        const ft   = Math.floor(totalInches / 12);
+        const inch = Math.round(totalInches % 12);
+        display = ft + '′' + inch + '″'; unit = '';
+      }
+      document.getElementById('heightDisplay').textContent = display;
+      document.getElementById('heightUnit').textContent    = unit;
+      document.getElementById('heightFeedback').textContent = getHeightComment(heightM);
     }
 
     function getHeightComment(h) {
-      if (h < 1.70) return 'You are really short for someone that is ' + h.toFixed(2) + ' metres tall, hehehe! 😄';
-      if (h === 1.70) return 'You are basically just average height for someone that is ' + h.toFixed(2) + ' metres tall, not bad! 😊';
-      return 'You are also quite tall for someone that is ' + h.toFixed(2) + ' metres tall, hehehe! 😄';
+      if (h < 1.70) return 'You are really short for someone that is ' + h.toFixed(2) + ' m tall, hehehe! 😄';
+      if (Math.abs(h - 1.70) < 0.005) return 'You are basically just average height for someone that is 1.70 m tall, not bad! 😊';
+      return 'You are also quite tall for someone that is ' + h.toFixed(2) + ' m tall, hehehe! 😄';
     }
 
-    /* ══════════════════════════════
-       WEIGHT CONTROLS
-    ══════════════════════════════ */
-    function setWeight(val) {
-      weight = Math.round(val * 10) / 10;
-      updateWeightUI();
+    /* ══ WEIGHT UNIT SWITCH ══ */
+    function setWeightUnit(u) {
+      wUnit = u;
+      ['kg','lb'].forEach(x => {
+        document.getElementById('wu-' + x).classList.toggle('active', x === u);
+        document.getElementById('panel-' + x).classList.toggle('hidden', x !== u);
+      });
+      refreshWeightDisplay();
     }
 
-    function adjustWeight(delta) {
-      weight = Math.round((weight + delta) * 10) / 10;
-      weight = Math.min(Math.max(weight, 1.0), 300.0);
-      updateWeightUI();
+    /* ══ WEIGHT SETTERS ══ */
+    function setWeightKg(v)  { weightKg = round(v, 1); refreshWeightDisplay(); }
+    function setWeightLb(v)  { weightKg = round(v * 0.453592, 2); refreshWeightDisplay(); }
+    function adjustWeightKg(d) { weightKg = clamp(round(weightKg + d, 1), 1, 300); refreshWeightDisplay(); }
+    function adjustWeightLb(d) { weightKg = clamp(round(weightKg + d * 0.453592, 2), 1, 300); refreshWeightDisplay(); }
+
+    function applyManualWeight(unit) {
+      let val;
+      if (unit === 'kg') {
+        val = parseFloat(document.getElementById('input-kg').value);
+        if (isNaN(val) || val < 1 || val > 300) { alert('Please enter a weight between 1 kg and 300 kg.'); return; }
+        weightKg = round(val, 1);
+      } else {
+        val = parseFloat(document.getElementById('input-lb').value);
+        if (isNaN(val) || val < 2 || val > 660) { alert('Please enter a weight between 2 lb and 660 lb.'); return; }
+        weightKg = round(val * 0.453592, 2);
+      }
+      refreshWeightDisplay();
+      document.getElementById('input-' + unit).value = '';
     }
 
-    function updateWeightUI() {
-      document.getElementById('weightDisplay').textContent = weight.toFixed(1);
-      document.getElementById('weightFeedback').innerHTML =
-        'Your weight is <strong>' + weight.toFixed(1) + ' kilograms</strong>. Cool!';
+    function refreshWeightDisplay() {
+      let display, unit;
+      if (wUnit === 'kg') {
+        display = weightKg.toFixed(1); unit = 'kg';
+      } else {
+        display = (weightKg / 0.453592).toFixed(1); unit = 'lb';
+      }
+      document.getElementById('weightDisplay').textContent = display;
+      document.getElementById('weightUnit').textContent    = unit;
+      document.getElementById('weightFeedback').innerHTML  =
+        'Your weight is <strong>' + display + ' ' + unit + '</strong>. Cool!';
     }
 
-    /* ══════════════════════════════
-       CALCULATE BMI
-    ══════════════════════════════ */
+    /* ══ CALCULATE ══ */
     function calculateBMI() {
-      const bmi        = weight / (height * height);
+      const bmi        = weightKg / (heightM * heightM);
       const bmiRounded = Math.round(bmi * 100) / 100;
 
-      // Show result
       const card = document.getElementById('resultCard');
       card.classList.remove('visible');
       void card.offsetWidth;
@@ -786,54 +592,36 @@
 
       document.getElementById('bmiNumber').textContent = bmiRounded.toFixed(2);
 
-      // Clear active range cards
-      ['r-under','r-normal','r-over','r-obese'].forEach(id => {
-        document.getElementById(id).classList.remove('active');
-      });
+      ['r-under','r-normal','r-over','r-obese'].forEach(id =>
+        document.getElementById(id).classList.remove('active'));
 
-      // Category
       let category, alertClass, alertText, activeRange;
       const clamped    = Math.min(Math.max(bmi, 10), 42);
       const markerLeft = Math.min(Math.max(((clamped - 10) / 32) * 100, 2), 97);
 
       if (bmi < 18.5) {
-        category    = 'Underweight';
-        alertClass  = 'alert-warn';
-        alertText   = '⚠️ Underweight — Your BMI is below 18.5. Consider consulting a healthcare professional.';
-        activeRange = 'r-under';
+        category = 'Underweight'; alertClass = 'alert-warn'; activeRange = 'r-under';
+        alertText = '⚠️ Underweight — Your BMI is below 18.5. Consider consulting a healthcare professional.';
       } else if (bmi < 25.0) {
-        category    = 'Normal Weight';
-        alertClass  = 'alert-ok';
-        alertText   = '✅ Normal weight — Your BMI is between 18.5 and 24.9. Great work, keep it up!';
-        activeRange = 'r-normal';
+        category = 'Normal Weight'; alertClass = 'alert-ok'; activeRange = 'r-normal';
+        alertText = '✅ Normal weight — Your BMI is between 18.5 and 24.9. Great work, keep it up!';
       } else if (bmi < 30.0) {
-        category    = 'Overweight';
-        alertClass  = 'alert-warn';
-        alertText   = '⚠️ Overweight — Your BMI is between 25.0 and 29.9. A healthy lifestyle can help!';
-        activeRange = 'r-over';
+        category = 'Overweight'; alertClass = 'alert-warn'; activeRange = 'r-over';
+        alertText = '⚠️ Overweight — Your BMI is between 25.0 and 29.9. A healthy lifestyle can help!';
       } else {
-        category    = 'Obese';
-        alertClass  = 'alert-bad';
-        alertText   = '❗ Obese — Your BMI is 30.0 or above. Please consult a healthcare professional.';
-        activeRange = 'r-obese';
+        category = 'Obese'; alertClass = 'alert-bad'; activeRange = 'r-obese';
+        alertText = '❗ Obese — Your BMI is 30.0 or above. Please consult a healthcare professional.';
       }
 
       document.getElementById('bmiCategory').textContent = category;
-      document.getElementById('r-' + activeRange.split('-')[1]).classList.add('active');
       document.getElementById(activeRange).classList.add('active');
 
       const alertEl = document.getElementById('bmiAlert');
-      alertEl.className = 'result-alert ' + alertClass;
+      alertEl.className   = 'result-alert ' + alertClass;
       alertEl.textContent = alertText;
+      document.getElementById('heightNote').textContent = getHeightComment(heightM);
 
-      document.getElementById('heightNote').textContent = getHeightComment(height);
-
-      // Animate scale dot
-      setTimeout(() => {
-        document.getElementById('scaleDot').style.left = markerLeft + '%';
-      }, 120);
-
-      // Scroll to result
+      setTimeout(() => { document.getElementById('scaleDot').style.left = markerLeft + '%'; }, 120);
       card.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -841,6 +629,10 @@
       document.getElementById('resultCard').classList.remove('visible');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    /* ══ UTILS ══ */
+    function round(v, d)    { return Math.round(v * Math.pow(10,d)) / Math.pow(10,d); }
+    function clamp(v, a, b) { return Math.min(Math.max(v, a), b); }
 
   </script>
 </body>
