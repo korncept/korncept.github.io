@@ -668,6 +668,7 @@
     <ul class="nav-links" role="list">
       <li><a href="#about">About</a></li>
       <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#apps">Apps & Games</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -688,6 +689,7 @@
   <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
     <a href="#about" onclick="closeMobileMenu()">About</a>
     <a href="#portfolio" onclick="closeMobileMenu()">Portfolio</a>
+    <a href="#apps" onclick="closeMobileMenu()">Apps & Games</a>
     <a href="#skills" onclick="closeMobileMenu()">Skills</a>
     <a href="#contact" onclick="closeMobileMenu()">Contact</a>
   </div>
@@ -773,7 +775,6 @@
         <button class="filter-btn" data-filter="photography" aria-pressed="false">Photography</button>
         <button class="filter-btn" data-filter="design" aria-pressed="false">Graphic Design</button>
         <button class="filter-btn" data-filter="research" aria-pressed="false">Research</button>
-        <button class="filter-btn" data-filter="dev" aria-pressed="false">Development</button>
       </div>
 
       <div class="portfolio-grid" role="list">
@@ -818,18 +819,51 @@
             <div class="portfolio-title">Product Mockup — Yale Cabin</div>
           </div>
         </div>
-        <a href="game.html" class="portfolio-card reveal" role="listitem" tabindex="0"
-             data-category="dev"
-             style="text-decoration:none; color: inherit;"
-             aria-label="Play Rock Paper Scissors game built with JavaScript">
-          <div class="portfolio-thumb" style="background: #1a1a1a; display:flex; align-items:center; justify-content:center;">
-            <span style="font-size:4rem; letter-spacing: 0.5rem;">✊✋✌️</span>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- APPS & GAMES -->
+    <section id="apps" aria-labelledby="apps-title">
+      <p class="section-eyebrow reveal">Built by Cornell</p>
+      <h2 class="section-title reveal" id="apps-title">Applications<br/>&amp; Games</h2>
+
+      <div class="portfolio-grid">
+        <a href="game.html"
+           class="portfolio-card reveal"
+           style="text-decoration:none; color:inherit;"
+           aria-label="Play Rock Paper Scissors — a JavaScript game by Cornell Isikhuemen">
+          <div class="portfolio-thumb" style="background:#111; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:0.5rem;">
+            <span style="font-size:3.5rem; letter-spacing:0.4rem;">✊✋✌️</span>
+            <span style="font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:#9a9080;">Click to Play</span>
           </div>
           <div class="portfolio-info">
-            <div class="portfolio-category">Development</div>
-            <div class="portfolio-title">Rock Paper Scissors — Play Now</div>
+            <div class="portfolio-category">JavaScript Game</div>
+            <div class="portfolio-title">Rock Paper Scissors</div>
           </div>
         </a>
+
+        <!-- Placeholder for future apps -->
+        <div class="portfolio-card reveal" style="opacity:0.4; cursor:default;" aria-label="More projects coming soon">
+          <div class="portfolio-thumb" style="background:#1a1a1a; display:flex; align-items:center; justify-content:center;">
+            <span style="font-size:3rem;">🚧</span>
+          </div>
+          <div class="portfolio-info">
+            <div class="portfolio-category">Coming Soon</div>
+            <div class="portfolio-title">BMI Calculator App</div>
+          </div>
+        </div>
+
+        <div class="portfolio-card reveal" style="opacity:0.4; cursor:default;" aria-label="More projects coming soon">
+          <div class="portfolio-thumb" style="background:#1a1a1a; display:flex; align-items:center; justify-content:center;">
+            <span style="font-size:3rem;">🚧</span>
+          </div>
+          <div class="portfolio-info">
+            <div class="portfolio-category">Coming Soon</div>
+            <div class="portfolio-title">More Projects Loading...</div>
+          </div>
+        </div>
       </div>
     </section>
 
