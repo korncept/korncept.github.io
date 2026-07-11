@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cornell's BMI Calculator | Korncept</title>
+  <meta name="description" content="Cornell's BMI Calculator — built by Cornell Osetale Isikhuemen (Korncept). Find out your Body Mass Index in seconds!" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --ink:      #0f0f0f;
+      --paper:    #f7f4ef;
+      --accent:   #b85c38;
+      --muted:    #7a7060;
+      --rule:     #d9d3c7;
+      --card-bg:  #ffffff;
+      --nav-bg:   rgba(247,244,239,0.92);
+      --success:  #2d5a27;
+      --warning:  #7a5a10;
+      --danger:   #7a1a1a;
+      --info:     #1a4a7a;
+      --display:  'Cormorant Garamond', Georgia, serif;
+      --body:     'DM Sans', system-ui, sans-serif;
+    }
+    [data-theme="dark"] {
+      --ink:     #f0ece4;
+      --paper:   #0f0f0f;
+      --accent:  #d4764e;
+      --muted:   #9a9080;
+      --rule:    #2a2a2a;
+      --card-bg: #1a1a1a;
+      --nav-bg:  rgba(15,15,15,0.92);
+      --success: #3a7a32;
+      --warning: #8a6a10;
+      --danger:  #8a2a2a;
+      --info:    #1a5a9a;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.7;
+      transition: background 0.3s, color 0.3s;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 6vw;
+      background: var(--nav-bg);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--rule);
+      z-index: 100; transition: background 0.3s;
+    }
+    .nav-logo { font-family: var(--display); font-size: 1.3rem; font-weight: 600; color: var(--ink); text-decoration: none; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-back { font-size: 0.78rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .nav-back:hover { color: var(--accent); }
+    .theme-toggle { background: none; border: 1px solid var(--rule); border-radius: 50px; padding: 0.4rem 0.8rem; cursor: pointer; font-size: 1rem; color: var(--ink); display: flex; align-items: center; gap: 0.4rem; transition: border-color 0.2s; }
+    .theme-toggle:hover { border-color: var(--accent); }
+    .toggle-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+    /* ── MAIN ── */
+    main { padding: 8rem 6vw 4rem; max-width: 680px; margin: 0 auto; }
+
+    /* ── HEADER ── */
+    .eyebrow { font-size: 0.78rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+    .page-title { font-family: var(--display); font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 300; line-height: 1.05; margin-bottom: 0.6rem; }
+    .page-title em { font-style: italic; color: var(--accent); }
+    .page-subtitle { font-size: 1rem; color: var(--muted); font-weight: 300; margin-bottom: 3rem; }
+
+    /* ── DIVIDER ── */
+    .divider { border: none; border-top: 1px solid var(--rule); margin: 2rem 0; }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--rule);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      transition: background 0.3s;
+    }
+
+    /* ── SLIDER GROUP ── */
+    .slider-group { margin-bottom: 2rem; }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1rem;
+    }
+
+    .slider-label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .slider-value {
+      font-family: var(--display);
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .slider-value span {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--muted);
+      font-family: var(--body);
+      margin-left: 0.3rem;
+    }
+
+    /* ── CUSTOM SLIDER ── */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 3px;
+      background: var(--rule);
+      outline: none;
+      border-radius: 0;
+      cursor: pointer;
+      position: relative;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.3); }
+    input[type="range"]::-moz-range-thumb {
+      width: 18px; height: 18px;
+      background: var(--accent);
+      border-radius: 50%; cursor: pointer; border: none;
+    }
+
+    .slider-range {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.4rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    /* ── FEEDBACK LINE ── */
+    .feedback-line {
+      margin-top: 0.8rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-style: italic;
+      min-height: 22px;
+      transition: opacity 0.3s;
+    }
+
+    /* ── CALCULATE BUTTON ── */
+    .calc-btn {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--body);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 1rem;
+    }
+    .calc-btn:hover { background: var(--accent); }
+    .calc-btn:active { transform: scale(0.99); }
+
+    /* ── RESULT CARD ── */
+    .result-card {
+      display: none;
+      border: 1px solid var(--rule);
+      background: var(--card-bg);
+      padding: 2rem;
+      margin-top: 2rem;
+      animation: fadeUp 0.5s ease both;
+      transition: background 0.3s;
+    }
+
+    .result-card.visible { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .bmi-number {
+      font-family: var(--display);
+      font-size: clamp(3.5rem, 10vw, 6rem);
+      font-weight: 300;
+      line-height: 1;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .bmi-category {
+      font-family: var(--display);
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── BMI SCALE BAR ── */
+    .bmi-scale {
+      margin: 1.5rem 0;
+    }
+
+    .scale-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .scale-bar {
+      height: 8px;
+      border-radius: 0;
+      background: linear-gradient(to right, #4a90d9 0%, #2d5a27 25%, #f5a623 62.5%, #d0021b 100%);
+      position: relative;
+      margin-bottom: 0.6rem;
+    }
+
+    .scale-marker {
+      position: absolute;
+      top: -5px;
+      width: 18px;
+      height: 18px;
+      background: var(--ink);
+      border-radius: 50%;
+      border: 2px solid var(--paper);
+      transform: translateX(-50%);
+      transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      color: var(--muted);
+    }
+
+    /* ── ALERT BOXES ── */
+    .alert {
+      padding: 1rem 1.2rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      border-left: 3px solid;
+    }
+
+    .alert-success { background: rgba(45,90,39,0.1); border-color: var(--success); color: var(--success); }
+    .alert-warning { background: rgba(122,90,16,0.1); border-color: var(--warning); color: var(--warning); }
+    .alert-danger  { background: rgba(122,26,26,0.1); border-color: var(--danger);  color: var(--danger); }
+    .alert-info    { background: rgba(26,74,122,0.1); border-color: var(--info);    color: var(--info); }
+
+    /* ── WHAT DOES IT MEAN ── */
+    .meaning-title {
+      font-family: var(--display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .meaning-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+
+    .meaning-card {
+      padding: 1rem;
+      border: 1px solid var(--rule);
+      font-size: 0.82rem;
+    }
+
+    .meaning-card.active-range {
+      border-color: var(--accent);
+      background: rgba(184,92,56,0.06);
+    }
+
+    .meaning-range {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.2rem;
+    }
+
+    .meaning-name { font-weight: 500; }
+
+    /* ── RECALCULATE ── */
+    .recalc-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: none;
+      border: 1px solid var(--rule);
+      color: var(--muted);
+      font-family: var(--body);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 1.5rem;
+    }
+    .recalc-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--rule); padding: 2rem 6vw; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    @media (max-width: 500px) {
+      .meaning-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Cornell Isikhuemen</a>
+    <div class="nav-right">
+      <a href="index.html" class="nav-back">← Back Home</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span id="themeIcon" aria-hidden="true">🌙</span>
+        <span class="toggle-label" id="themeLabel">Dark</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <p class="eyebrow">Mini App</p>
+    <h1 class="page-title">Cornell's<br/><em>BMI Calculator</em></h1>
+    <p class="page-subtitle">Find out your Body Mass Index in seconds! 💪</p>
+
+    <hr class="divider" />
+
+    <!-- INPUT CARD -->
+    <div class="card">
+
+      <!-- HEIGHT SLIDER -->
+      <div class="slider-group">
+        <div class="slider-header">
+          <label class="slider-label" for="heightSlider">Height</label>
+          <div class="slider-value" id="heightDisplay">1.70 <span>metres</span></div>
+        </div>
+        <input type="range" id="heightSlider" min="0.50" max="3.00" step="0.01" value="1.70"
+               aria-label="Height in metres" aria-valuemin="0.50" aria-valuemax="3.00" aria-valuenow="1.70" />
+        <div class="slider-range"><span>0.50m</span><span>3.00m</span></div>
+        <div class="feedback-line" id="heightFeedback">You are basically just average height for someone that is 1.70 metres tall, not bad! 😊</div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- WEIGHT SLIDER -->
+      <div class="slider-group">
+        <div class="slider-header">
+          <label class="slider-label" for="weightSlider">Weight</label>
+          <div class="slider-value" id="weightDisplay">70.0 <span>kilograms</span></div>
+        </div>
+        <input type="range" id="weightSlider" min="1" max="300" step="0.1" value="70"
+               aria-label="Weight in kilograms" aria-valuemin="1" aria-valuemax="300" aria-valuenow="70" />
+        <div class="slider-range"><span>1 kg</span><span>300 kg</span></div>
+        <div class="feedback-line" id="weightFeedback">Your weight is <strong>70.0 kilograms</strong>. Cool!</div>
+      </div>
+
+      <button class="calc-btn" onclick="calculateBMI()" aria-label="Calculate my BMI">
+        Calculate my BMI 🚀
+      </button>
+    </div>
+
+    <!-- RESULT CARD -->
+    <div class="result-card" id="resultCard" role="region" aria-live="polite" aria-label="BMI Result">
+
+      <div class="result-eyebrow">Your Body Mass Index</div>
+      <div class="bmi-number" id="bmiNumber">—</div>
+      <div class="bmi-category" id="bmiCategory"></div>
+
+      <!-- BMI SCALE BAR -->
+      <div class="bmi-scale">
+        <div class="scale-label">Where you fall on the BMI scale</div>
+        <div class="scale-bar">
+          <div class="scale-marker" id="scaleMarker" style="left: 0%"></div>
+        </div>
+        <div class="scale-labels">
+          <span>Underweight<br/>&lt;18.5</span>
+          <span>Normal<br/>18.5–24.9</span>
+          <span>Overweight<br/>25–29.9</span>
+          <span>Obese<br/>≥30</span>
+        </div>
+      </div>
+
+      <!-- HEIGHT COMMENT -->
+      <div class="alert alert-info" id="heightComment"></div>
+
+      <!-- BMI ALERT -->
+      <div class="alert" id="bmiAlert"></div>
+
+      <!-- WHAT DOES IT MEAN -->
+      <div class="meaning-title">What does your BMI mean?</div>
+      <div class="meaning-grid">
+        <div class="meaning-card" id="range-underweight">
+          <div class="meaning-range">BMI below 18.5</div>
+          <div class="meaning-name">⚠️ Underweight</div>
+        </div>
+        <div class="meaning-card" id="range-normal">
+          <div class="meaning-range">BMI 18.5 – 24.9</div>
+          <div class="meaning-name">✅ Normal Weight</div>
+        </div>
+        <div class="meaning-card" id="range-overweight">
+          <div class="meaning-range">BMI 25.0 – 29.9</div>
+          <div class="meaning-name">⚠️ Overweight</div>
+        </div>
+        <div class="meaning-card" id="range-obese">
+          <div class="meaning-range">BMI 30.0 and above</div>
+          <div class="meaning-name">❗ Obese</div>
+        </div>
+      </div>
+
+      <button class="recalc-btn" onclick="recalculate()">Recalculate ↺</button>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="index.html" style="color:var(--muted);text-decoration:none;font-size:0.8rem;letter-spacing:0.05em;transition:color 0.2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">← Back to Portfolio</a>
+    <span>© 2026 Cornell Osetale Isikhuemen</span>
+    <span>Built with JavaScript</span>
+  </footer>
+
+  <script>
+
+    /* ── DARK / LIGHT MODE ── */
+    const html = document.documentElement;
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+    updateToggleUI(savedTheme);
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateToggleUI(next);
+    });
+
+    function updateToggleUI(theme) {
+      document.getElementById('themeIcon').textContent  = theme === 'dark' ? '☀️' : '🌙';
+      document.getElementById('themeLabel').textContent = theme === 'dark' ? 'Light' : 'Dark';
+    }
+
+    /* ── SLIDERS ── */
+    const heightSlider   = document.getElementById('heightSlider');
+    const weightSlider   = document.getElementById('weightSlider');
+    const heightDisplay  = document.getElementById('heightDisplay');
+    const weightDisplay  = document.getElementById('weightDisplay');
+    const heightFeedback = document.getElementById('heightFeedback');
+    const weightFeedback = document.getElementById('weightFeedback');
+
+    heightSlider.addEventListener('input', () => {
+      const h = parseFloat(heightSlider.value).toFixed(2);
+      heightDisplay.innerHTML = h + ' <span>metres</span>';
+      heightSlider.setAttribute('aria-valuenow', h);
+      heightFeedback.innerHTML = getHeightComment(parseFloat(h));
+    });
+
+    weightSlider.addEventListener('input', () => {
+      const w = parseFloat(weightSlider.value).toFixed(1);
+      weightDisplay.innerHTML = w + ' <span>kilograms</span>';
+      weightSlider.setAttribute('aria-valuenow', w);
+      weightFeedback.innerHTML = 'Your weight is <strong>' + w + ' kilograms</strong>. Cool!';
+    });
+
+    function getHeightComment(h) {
+      if (h < 1.70) return 'You are really short for someone that is ' + h.toFixed(2) + ' metres tall, hehehe! 😄';
+      if (h === 1.70) return 'You are basically just average height for someone that is ' + h.toFixed(2) + ' metres tall, not bad! 😊';
+      return 'You are also quite tall for someone that is ' + h.toFixed(2) + ' metres tall, hehehe! 😄';
+    }
+
+    /* ── CALCULATE BMI ── */
+    function calculateBMI() {
+      const height = parseFloat(heightSlider.value);
+      const weight = parseFloat(weightSlider.value);
+      const bmi    = weight / (height * height);
+      const bmiRounded = Math.round(bmi * 100) / 100;
+
+      // Show result card
+      const resultCard = document.getElementById('resultCard');
+      resultCard.classList.remove('visible');
+      void resultCard.offsetWidth; // force reflow for animation
+      resultCard.classList.add('visible');
+
+      // Set BMI number
+      document.getElementById('bmiNumber').textContent = bmiRounded.toFixed(2);
+
+      // Category + alert + scale marker
+      let category, alertClass, alertText, markerLeft;
+
+      // Scale: underweight 0-25%, normal 25-62.5%, overweight 62.5-87.5%, obese 87.5-100%
+      // BMI range: <18.5, 18.5-25, 25-30, 30+
+      // Map BMI to scale position (capped at 40 for obese end)
+      const clampedBMI = Math.min(Math.max(bmi, 10), 40);
+      markerLeft = ((clampedBMI - 10) / 30) * 100;
+      markerLeft = Math.min(Math.max(markerLeft, 2), 98);
+
+      // Clear active range cards
+      document.querySelectorAll('.meaning-card').forEach(c => c.classList.remove('active-range'));
+
+      if (bmi < 18.5) {
+        category  = 'Underweight';
+        alertClass = 'alert-warning';
+        alertText  = '⚠️ Underweight — Your BMI is below 18.5. Consider consulting a healthcare professional.';
+        document.getElementById('range-underweight').classList.add('active-range');
+      } else if (bmi < 25.0) {
+        category  = 'Normal Weight';
+        alertClass = 'alert-success';
+        alertText  = '✅ Normal weight — Your BMI is between 18.5 and 24.9. Keep it up!';
+        document.getElementById('range-normal').classList.add('active-range');
+      } else if (bmi < 30.0) {
+        category  = 'Overweight';
+        alertClass = 'alert-warning';
+        alertText  = '⚠️ Overweight — Your BMI is between 25.0 and 29.9. A healthy lifestyle can help!';
+        document.getElementById('range-overweight').classList.add('active-range');
+      } else {
+        category  = 'Obese';
+        alertClass = 'alert-danger';
+        alertText  = '❗ Obese — Your BMI is 30.0 or above. Please consult a healthcare professional.';
+        document.getElementById('range-obese').classList.add('active-range');
+      }
+
+      document.getElementById('bmiCategory').textContent = category;
+
+      // Height comment
+      document.getElementById('heightComment').textContent = getHeightComment(height).replace(/<[^>]*>/g, '');
+
+      // BMI alert
+      const alertEl = document.getElementById('bmiAlert');
+      alertEl.className = 'alert ' + alertClass;
+      alertEl.textContent = alertText;
+
+      // Animate scale marker
+      setTimeout(() => {
+        document.getElementById('scaleMarker').style.left = markerLeft + '%';
+      }, 100);
+
+      // Scroll to result
+      resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function recalculate() {
+      document.getElementById('resultCard').classList.remove('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+  </script>
+</body>
+</html>
