@@ -41,6 +41,7 @@
   }
   </script>
 
+  <link rel="stylesheet" href="fonts.css" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <style>
@@ -859,13 +860,14 @@
           </div>
         </a>
 
-        <div class="portfolio-card reveal" style="opacity:0.4; cursor:default;" aria-label="More projects coming soon">
-          <div class="portfolio-thumb" style="background:#1a1a1a; display:flex; align-items:center; justify-content:center;">
-            <span style="font-size:3rem;">🚧</span>
+        <div class="portfolio-card reveal" style="cursor:default; pointer-events:none;" aria-label="More projects coming soon">
+          <div class="portfolio-thumb" style="background: linear-gradient(135deg, #1a1917 0%, #2a2926 100%); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:0.8rem;">
+            <span style="font-size:2rem; opacity:0.4;">✦</span>
+            <span style="font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:#888078; opacity:0.8;">More Coming</span>
           </div>
-          <div class="portfolio-info">
-            <div class="portfolio-category">Coming Soon</div>
-            <div class="portfolio-title">More Projects Loading...</div>
+          <div class="portfolio-info" style="opacity:0.5;">
+            <div class="portfolio-category">In Progress</div>
+            <div class="portfolio-title">New Projects Loading...</div>
           </div>
         </div>
       </div>
@@ -1095,9 +1097,9 @@
     });
 
     /* ── 8. LIGHTBOX ── */
-    const lightbox     = document.getElementById('lightbox');
-    const lightboxImg  = document.getElementById('lightboxImg');
-    const lightboxCap  = document.getElementById('lightboxCaption');
+    const lightbox      = document.getElementById('lightbox');
+    const lightboxImg   = document.getElementById('lightboxImg');
+    const lightboxCap   = document.getElementById('lightboxCaption');
     const lightboxClose = document.getElementById('lightboxClose');
 
     portfolioCards.forEach(card => {
@@ -1108,9 +1110,14 @@
     });
 
     function openLightbox(card) {
-      lightboxImg.src = card.getAttribute('data-img');
-      lightboxImg.alt = card.getAttribute('data-caption');
-      lightboxCap.textContent = card.getAttribute('data-caption');
+      // Skip if it's a link card (has href) or has no real image
+      if (card.tagName === 'A') return;
+      const img = card.getAttribute('data-img');
+      if (!img || img === 'null' || img === '') return;
+
+      lightboxImg.src          = img;
+      lightboxImg.alt          = card.getAttribute('data-caption') || '';
+      lightboxCap.textContent  = card.getAttribute('data-caption') || '';
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
       lightboxClose.focus();
