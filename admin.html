@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel | Korncept</title>
   <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="fonts.css" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <style>
@@ -199,9 +200,15 @@
 
       <div class="card">
         <div class="alert alert-bad" id="login-error">❌ Incorrect password. Please try again.</div>
-        <label class="field-label" for="loginPassword">Password</label>
-        <input class="field-input" type="password" id="loginPassword" placeholder="Enter admin password" />
-        <button class="btn-primary" onclick="login()">Login →</button>
+        <form id="loginForm" onsubmit="login(event)" autocomplete="on" action="#">
+          <label class="field-label" for="loginPassword">Password</label>
+          <input class="field-input" type="password" id="loginPassword"
+            name="password"
+            placeholder="Enter admin password"
+            autocomplete="current-password"
+            aria-label="Admin password" />
+          <button type="submit" class="btn-primary">Login →</button>
+        </form>
         <br/>
         <span class="forgot-link" onclick="showScreen('screen-forgot')">Forgot password?</span>
       </div>
@@ -481,7 +488,8 @@
     /* ══════════════════════════════
        LOGIN
     ══════════════════════════════ */
-    function login() {
+    function login(e) {
+      if (e) e.preventDefault();
       const pw = document.getElementById('loginPassword').value;
       if (checkPw(pw)) {
         localStorage.setItem(KEY_AUTH, 'true');
@@ -495,9 +503,7 @@
       }
     }
 
-    document.getElementById('loginPassword').addEventListener('keydown', e => {
-      if (e.key === 'Enter') login();
-    });
+    document.getElementById('loginForm').addEventListener('submit', login);
 
     function logout() {
       if (!confirm('Are you sure you want to logout?')) return;
