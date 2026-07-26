@@ -158,7 +158,74 @@
     /* ── EMPTY ── */
     .empty-state { text-align: center; padding: 2.5rem; color: var(--muted); font-size: 0.85rem; font-style: italic; border: 1px dashed var(--rule); }
 
-    /* ── LOGOUT ROW ── */
+    /* ── PHOTO UPLOAD ZONE ── */
+    .photo-upload-zone {
+      border: 2px dashed var(--rule);
+      padding: 2.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: var(--paper);
+    }
+    .photo-upload-zone:hover { border-color: var(--accent); background: var(--accent-dim); }
+
+    /* ── CROP VIEWPORT ── */
+    .crop-wrap { display: flex; flex-direction: column; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; }
+    .crop-circle {
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--accent);
+      box-shadow: 0 0 0 6px var(--accent-dim);
+      cursor: grab;
+      position: relative;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .crop-circle:active { cursor: grabbing; }
+    .crop-img-container {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #cropImg {
+      position: absolute;
+      width: 100%;
+      transform-origin: center center;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .crop-guide { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; text-align: center; }
+
+    /* ── ZOOM ── */
+    .zoom-row { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.2rem; }
+    .zoom-icon { font-size: 0.9rem; flex-shrink: 0; }
+    .zoom-row input[type="range"] { flex: 1; -webkit-appearance: none; appearance: none; height: 3px; background: var(--rule); outline: none; cursor: pointer; }
+    .zoom-row input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; background: var(--accent); border-radius: 50%; cursor: pointer; }
+    .zoom-value { font-family: var(--display); font-size: 0.78rem; font-weight: 600; color: var(--accent); min-width: 38px; }
+
+    /* ── FINE CONTROLS ── */
+    .fine-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    .fine-group {}
+    .fine-row { display: flex; gap: 0.4rem; }
+    .fine-btn { padding: 0.5rem 0.7rem; background: var(--paper); border: 1px solid var(--rule); color: var(--muted); font-size: 0.72rem; cursor: pointer; transition: all 0.15s; font-family: var(--display); }
+    .fine-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+    .fine-btn:active { transform: scale(0.93); }
+
+    /* ── PREVIEW ROW ── */
+    .preview-row { display: flex; gap: 1.5rem; align-items: flex-end; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .preview-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; text-align: center; }
+    .preview-circle { border-radius: 50%; overflow: hidden; border: 2px solid var(--accent); background: #1a1917; flex-shrink: 0; }
+    .preview-lg { width: 100px; height: 100px; }
+    .preview-md { width: 70px;  height: 70px; }
+    .preview-sm { width: 44px;  height: 44px; }
+
+    @media (max-width: 480px) {
+      .fine-controls { grid-template-columns: 1fr; }
+      .crop-circle { width: 200px; height: 200px; }
+    }
     .logout-row { display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); flex-wrap: wrap; gap: 0.8rem; }
     .logout-info { font-size: 0.8rem; color: var(--muted); }
 
@@ -271,6 +338,7 @@
       <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('portfolio')" id="tab-portfolio">🖼️ Portfolio</button>
         <button class="tab-btn"        onclick="switchTab('links')"     id="tab-links">🔗 Links</button>
+        <button class="tab-btn"        onclick="switchTab('photo')"     id="tab-photo">📸 Profile Photo</button>
         <button class="tab-btn"        onclick="switchTab('manage')"    id="tab-manage">⚙️ Manage</button>
         <button class="tab-btn"        onclick="switchTab('settings')"  id="tab-settings">🔐 Settings</button>
       </div>
@@ -363,6 +431,114 @@
         <div class="section-title" style="margin-top:2rem;">Saved Links</div>
         <div id="linksList" class="items-list">
           <div class="empty-state">No links saved yet!</div>
+        </div>
+      </div>
+
+      <!-- ── PHOTO EDITOR TAB ── -->
+      <div class="tab-panel" id="panel-photo">
+        <div class="section-title">Profile Photo Editor</div>
+
+        <!-- UPLOAD CARD -->
+        <div class="card">
+          <label class="field-label">Upload New Photo</label>
+          <div class="photo-upload-zone" id="photoUploadZone" onclick="document.getElementById('photoFileInput').click()">
+            <span style="font-size:2.5rem; display:block; margin-bottom:0.5rem;">📸</span>
+            <span style="font-size:0.82rem; color:var(--muted);">Click to upload or drag & drop your photo here</span>
+            <span style="font-size:0.72rem; color:var(--muted); margin-top:0.3rem; display:block;">JPG, PNG, WEBP supported</span>
+          </div>
+          <input type="file" id="photoFileInput" accept="image/*" class="hidden" onchange="loadPhotoForEdit(event)" />
+        </div>
+
+        <!-- EDITOR CARD — hidden until photo loaded -->
+        <div class="card hidden" id="editorCard">
+          <label class="field-label">Crop & Position</label>
+          <p style="font-size:0.78rem;color:var(--muted);margin-bottom:1rem;">Drag the photo to reposition it inside the circle. Use the zoom slider to zoom in or out.</p>
+
+          <!-- CROP VIEWPORT -->
+          <div class="crop-wrap">
+            <div class="crop-circle" id="cropCircle">
+              <div class="crop-img-container" id="cropImgContainer">
+                <img id="cropImg" src="" alt="Profile photo preview" draggable="false" />
+              </div>
+            </div>
+            <div class="crop-guide">👆 Drag to reposition · Use slider to zoom</div>
+          </div>
+
+          <!-- ZOOM SLIDER -->
+          <div class="zoom-row">
+            <span class="zoom-icon">🔍−</span>
+            <input type="range" id="zoomSlider" min="100" max="300" value="120" step="1"
+                   oninput="applyZoom(this.value)" aria-label="Zoom level" />
+            <span class="zoom-icon">🔍+</span>
+            <span class="zoom-value" id="zoomValue">120%</span>
+          </div>
+
+          <!-- FINE CONTROLS -->
+          <div class="fine-controls">
+            <div class="fine-group">
+              <label class="field-label" style="margin-bottom:0.3rem;">Horizontal Position</label>
+              <div class="fine-row">
+                <button class="fine-btn" onclick="nudge(-10, 0)">◀◀</button>
+                <button class="fine-btn" onclick="nudge(-2, 0)">◀</button>
+                <button class="fine-btn" onclick="nudge(2, 0)">▶</button>
+                <button class="fine-btn" onclick="nudge(10, 0)">▶▶</button>
+              </div>
+            </div>
+            <div class="fine-group">
+              <label class="field-label" style="margin-bottom:0.3rem;">Vertical Position</label>
+              <div class="fine-row">
+                <button class="fine-btn" onclick="nudge(0, -10)">▲▲</button>
+                <button class="fine-btn" onclick="nudge(0, -2)">▲</button>
+                <button class="fine-btn" onclick="nudge(0, 2)">▼</button>
+                <button class="fine-btn" onclick="nudge(0, 10)">▼▼</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PREVIEW ROW -->
+          <div class="preview-row">
+            <div>
+              <div class="preview-label">Large Preview</div>
+              <div class="preview-circle preview-lg" id="previewLg"></div>
+            </div>
+            <div>
+              <div class="preview-label">Medium Preview</div>
+              <div class="preview-circle preview-md" id="previewMd"></div>
+            </div>
+            <div>
+              <div class="preview-label">Small Preview</div>
+              <div class="preview-circle preview-sm" id="previewSm"></div>
+            </div>
+          </div>
+
+          <!-- ACTIONS -->
+          <div class="alert alert-ok"  id="photo-success">✅ Profile photo saved! Download the file below and upload it to your GitHub images folder to make it permanent.</div>
+          <div class="alert alert-bad" id="photo-error">❌ Something went wrong. Please try again.</div>
+
+          <div class="btn-row" style="margin-top:1rem;">
+            <button class="btn-primary" style="flex:1" onclick="saveProfilePhoto()">Save Profile Photo →</button>
+            <button class="btn-secondary" onclick="resetEditor()">Reset</button>
+          </div>
+        </div>
+
+        <!-- DOWNLOAD CARD — shown after save -->
+        <div class="card hidden" id="downloadCard">
+          <div class="section-title">Download & Upload to GitHub</div>
+          <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1.2rem;">Your cropped photo is ready! Download it and upload it to your <code>images/</code> folder on GitHub, replacing the old <code>cornell.jpg</code>. Your site will update automatically!</p>
+          <a id="downloadLink" class="btn-primary" style="display:inline-block;text-decoration:none;text-align:center;width:100%;padding:0.9rem;" download="cornell.jpg">⬇️ Download Cropped Photo</a>
+        </div>
+
+        <!-- CURRENT PHOTO CARD -->
+        <div class="card" id="currentPhotoCard">
+          <div class="section-title">Current Profile Photo</div>
+          <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+            <div class="preview-circle preview-lg" id="currentPhotoPreview" style="background:#1a1917;flex-shrink:0;">
+              <img src="images/cornell.jpg" alt="Current profile photo" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.style.display='none'" />
+            </div>
+            <div>
+              <p style="font-size:0.88rem;color:var(--muted);line-height:1.7;">This is your current profile photo as it appears on your homepage. Upload and save a new one above to replace it.</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -664,6 +840,192 @@
       if (tab === 'manage')   renderManage();
       if (tab === 'links')    renderLinks();
       if (tab === 'settings') loadSecuritySettings();
+    }
+
+    /* ══════════════════════════════
+       PHOTO EDITOR
+    ══════════════════════════════ */
+    let photoOriginalSrc = null;
+    let currentZoom      = 120;
+    let dragStartX       = 0;
+    let dragStartY       = 0;
+    let imgOffsetX       = 0;
+    let imgOffsetY       = 0;
+    let isDragging       = false;
+
+    // Drag & drop on upload zone
+    const uploadZone = document.getElementById('photoUploadZone');
+    uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.style.borderColor = 'var(--accent)'; });
+    uploadZone.addEventListener('dragleave', () => { uploadZone.style.borderColor = ''; });
+    uploadZone.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadZone.style.borderColor = '';
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) loadPhotoFile(file);
+    });
+
+    function loadPhotoForEdit(event) {
+      const file = event.target.files[0];
+      if (file) loadPhotoFile(file);
+    }
+
+    function loadPhotoFile(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        photoOriginalSrc = e.target.result;
+        const img = document.getElementById('cropImg');
+        img.src = photoOriginalSrc;
+        img.onload = () => {
+          // Reset position and zoom
+          imgOffsetX = 0; imgOffsetY = 0; currentZoom = 120;
+          document.getElementById('zoomSlider').value = 120;
+          document.getElementById('zoomValue').textContent = '120%';
+          applyTransform();
+          updatePreviews();
+          document.getElementById('editorCard').classList.remove('hidden');
+          document.getElementById('downloadCard').classList.add('hidden');
+          hideAlerts('photo');
+          document.getElementById('editorCard').scrollIntoView({ behavior: 'smooth' });
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+
+    /* ── DRAG TO REPOSITION ── */
+    const cropCircle = document.getElementById('cropCircle');
+
+    cropCircle.addEventListener('mousedown', startDrag);
+    cropCircle.addEventListener('touchstart', startDragTouch, { passive: true });
+
+    function startDrag(e) {
+      isDragging = true;
+      dragStartX = e.clientX - imgOffsetX;
+      dragStartY = e.clientY - imgOffsetY;
+      e.preventDefault();
+    }
+
+    function startDragTouch(e) {
+      isDragging = true;
+      dragStartX = e.touches[0].clientX - imgOffsetX;
+      dragStartY = e.touches[0].clientY - imgOffsetY;
+    }
+
+    document.addEventListener('mousemove', onDrag);
+    document.addEventListener('touchmove', onDragTouch, { passive: true });
+    document.addEventListener('mouseup',   endDrag);
+    document.addEventListener('touchend',  endDrag);
+
+    function onDrag(e) {
+      if (!isDragging) return;
+      imgOffsetX = e.clientX - dragStartX;
+      imgOffsetY = e.clientY - dragStartY;
+      applyTransform();
+      updatePreviews();
+    }
+
+    function onDragTouch(e) {
+      if (!isDragging) return;
+      imgOffsetX = e.touches[0].clientX - dragStartX;
+      imgOffsetY = e.touches[0].clientY - dragStartY;
+      applyTransform();
+      updatePreviews();
+    }
+
+    function endDrag() { isDragging = false; }
+
+    /* ── ZOOM ── */
+    function applyZoom(val) {
+      currentZoom = parseInt(val);
+      document.getElementById('zoomValue').textContent = currentZoom + '%';
+      applyTransform();
+      updatePreviews();
+    }
+
+    /* ── NUDGE (fine controls) ── */
+    function nudge(dx, dy) {
+      imgOffsetX += dx;
+      imgOffsetY += dy;
+      applyTransform();
+      updatePreviews();
+    }
+
+    /* ── APPLY TRANSFORM ── */
+    function applyTransform() {
+      const img = document.getElementById('cropImg');
+      img.style.transform = `translate(${imgOffsetX}px, ${imgOffsetY}px) scale(${currentZoom / 100})`;
+    }
+
+    /* ── UPDATE PREVIEWS ── */
+    function updatePreviews() {
+      ['previewLg', 'previewMd', 'previewSm'].forEach(id => {
+        const el  = document.getElementById(id);
+        const size = el.offsetWidth;
+        el.style.backgroundImage    = `url(${photoOriginalSrc})`;
+        el.style.backgroundSize     = `${currentZoom}%`;
+        el.style.backgroundPosition = `calc(50% + ${imgOffsetX * (size / 260)}px) calc(50% + ${imgOffsetY * (size / 260)}px)`;
+        el.style.backgroundRepeat   = 'no-repeat';
+      });
+    }
+
+    /* ── RESET EDITOR ── */
+    function resetEditor() {
+      imgOffsetX = 0; imgOffsetY = 0; currentZoom = 120;
+      document.getElementById('zoomSlider').value = 120;
+      document.getElementById('zoomValue').textContent = '120%';
+      applyTransform();
+      updatePreviews();
+    }
+
+    /* ── SAVE PROFILE PHOTO (canvas crop) ── */
+    function saveProfilePhoto() {
+      if (!photoOriginalSrc) return;
+      hideAlerts('photo');
+
+      const SIZE    = 400; // output size in px
+      const canvas  = document.createElement('canvas');
+      canvas.width  = SIZE;
+      canvas.height = SIZE;
+      const ctx     = canvas.getContext('2d');
+
+      // Circular clip
+      ctx.beginPath();
+      ctx.arc(SIZE / 2, SIZE / 2, SIZE / 2, 0, Math.PI * 2);
+      ctx.clip();
+
+      const img    = new Image();
+      img.onload   = () => {
+        const scale     = currentZoom / 100;
+        const drawW     = img.naturalWidth  * scale;
+        const drawH     = img.naturalHeight * scale;
+
+        // Scale offsets from 260px crop circle to SIZE canvas
+        const ratio     = SIZE / 260;
+        const drawX     = (SIZE - drawW) / 2 + imgOffsetX * ratio;
+        const drawY     = (SIZE - drawH) / 2 + imgOffsetY * ratio;
+
+        ctx.drawImage(img, drawX, drawY, drawW, drawH);
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+
+        // Save to localStorage so homepage can load it
+        try {
+          localStorage.setItem('profile_photo', dataUrl);
+        } catch(e) {
+          // localStorage may be full if image is large
+        }
+
+        // Offer download
+        const link       = document.getElementById('downloadLink');
+        link.href        = dataUrl;
+        document.getElementById('downloadCard').classList.remove('hidden');
+        document.getElementById('photo-success').classList.add('visible');
+        document.getElementById('downloadCard').scrollIntoView({ behavior: 'smooth' });
+
+        // Update current preview
+        const cur = document.getElementById('currentPhotoPreview');
+        cur.innerHTML = `<img src="${dataUrl}" alt="Profile photo" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
+      };
+      img.src = photoOriginalSrc;
     }
 
     /* ══════════════════════════════
